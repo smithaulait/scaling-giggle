@@ -26,15 +26,6 @@ on:
         description: 'Device codename'
         required: true
         default: 'veux'
-      BUILD_TARGET:
-        description: 'Build target'
-        required: true
-        default: 'vendorboot'
-        type: choice
-        options:
-        - boot
-        - recovery
-        - vendorboot
       USE_CCACHE:
         description: Use ccache for compilation
         type: boolean
@@ -64,7 +55,7 @@ jobs:
     - name: Build Environment
       run: |
         echo "Installing..."
-        #curl https://raw.githubusercontent.com/akhilnarang/scripts/refs/heads/master/setup/android_build_env.sh | bash -
+        curl https://raw.githubusercontent.com/akhilnarang/scripts/refs/heads/master/setup/android_build_env.sh | bash -
 
     - name: Setup ccache
       uses: hendrikmuhs/ccache-action@v1.2
