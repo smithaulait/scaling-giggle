@@ -81,6 +81,7 @@ jobs:
         cd ${{ github.event.inputs.DEVICE_PATH }}
         echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
+        cd -
         source build/envsetup.sh
         sed -i '$ a CONFIG_KSU=y' kernel/xiaomi/sm6375/arch/arm64/configs/veux_defconfig
 
