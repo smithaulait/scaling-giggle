@@ -82,13 +82,14 @@ jobs:
         echo "COMMIT_ID=$(git rev-parse HEAD)" >> $GITHUB_ENV
 
         cd -
+        set +e
         source build/envsetup.sh
         sed -i '$ a CONFIG_KSU=y' kernel/xiaomi/sm6375/arch/arm64/configs/veux_defconfig
 
     - name: Building OrangeFox
       run: |
-        cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }}
         set +e
+        cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }
         
         if [[ ${{ github.event.inputs.USE_CCACHE }} == true ]]; then
           export USE_CCACHE=1
@@ -100,7 +101,7 @@ jobs:
         sed -i '/# clean up, with success code/a cd $ANDROID_BUILD_TOP && bash lzma.sh $ZIP_FILE' vendor/recovery/OrangeFox_A12.sh
         
         source build/envsetup.sh
-        lunch twrp_${{ github.event.inputs.DEVICE_NAME }}-eng && mka adbd vendorbootimage
+        lunch twrp_veux-eng && mka adbd vendorbootimage
         
         export TWRP_BUILD_BOOT_IMAGE=1
         source build/envsetup.sh
@@ -108,7 +109,7 @@ jobs:
 
     - name: Set Release Properties
       run: |
-        echo "BUILD_DATE=$(TZ=Asia/Manila date +%Y%m%d)" >> $GITHUB_ENV
+        echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
         cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }}
 
     - name: Upload to Release
@@ -117,7 +118,7 @@ jobs:
         files: |
           OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }}/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/OrangeFox*.img
           OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }}/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/OrangeFox*.zip
-        name: OrangeFox Recovery for ${{ github.event.inputs.DEVICE_NAME }} // ${{ env.BUILD_DATE }}
+        name: ${{ env.BUILD_DATE }}
         tag_name: ${{ github.run_id }}
         body: |
           ## OrangeFox Recovery Build - Unofficial
