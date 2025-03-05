@@ -89,7 +89,7 @@ jobs:
     - name: Building OrangeFox
       run: |
         set +e
-        cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }
+        cd ${GITHUB_WORKSPACE}/OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }}
         
         if [[ ${{ github.event.inputs.USE_CCACHE }} == true ]]; then
           export USE_CCACHE=1
