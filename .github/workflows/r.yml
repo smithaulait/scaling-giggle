@@ -116,13 +116,28 @@ jobs:
     - name: Set Release name
       run: |
         echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+        mgb=vendor/recovery/tools/magiskboot
+        mkdir tempo
+        cd tempo
+        for i in $(find ../out/target/product/veux -name "OrangeFox-*.img"); do
+            $mgb unpack $i
+            if [[ $i == *"vendor_boot"* ]]; then
+                mv ramdisk.cpio vendor_boot.cpio
+            else
+                mv ramdisk.cpio boot.cpio
+            fi
+            $mgb cleanup
+        done
+        git clone https://gitlab.com/1f1e33/android/AnyKernel3.git -b beta
+        mv *.cpio AnyKernel3/recovery
+        cd AnyKernel3
+        zip -r9 ../the_prince.zip . -x "**.git*" "*placeholder"
 
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }}/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/OrangeFox*.img
-          OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }}/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/OrangeFox*.zip
+          OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }}/tempo/the_prince.zip
         name: ${{ env.BUILD_DATE }}
         tag_name: ${{ github.run_id }}
         body: |
