@@ -113,9 +113,6 @@ jobs:
         source build/envsetup.sh
         lunch twrp_veux-eng && mka adbd bootimage
 
-    - name: Set Release name
-      run: |
-        echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
         mgb=vendor/recovery/tools/magiskboot
         mkdir tempo
         cd tempo
@@ -132,6 +129,10 @@ jobs:
         mv *.cpio AnyKernel3/recovery
         cd AnyKernel3
         zip -r9 ../the_prince.zip . -x "**.git*" "*placeholder"
+
+    - name: Set Release name
+      run: |
+        echo "BUILD_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
 
     - name: Release
       uses: softprops/action-gh-release@v2
