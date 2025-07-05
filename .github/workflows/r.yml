@@ -14,11 +14,11 @@ on:
       DEVICE_TREE:
         description: 'DT git'
         required: true
-        default: 'https://github.com/cachiusa/orangefox_device_xiaomi_veux'
+        default: 'https://gitlab.com/1f1e33/android/orangefox_device_xiaomi_veux.git'
       DEVICE_TREE_BRANCH:
         description: 'DT branch'
         required: true
-        default: 'staging'
+        default: 'fox_12.1-dev'
       DEVICE_PATH:
         description: 'DT path'
         required: true
@@ -132,13 +132,13 @@ jobs:
         git clone https://gitlab.com/1f1e33/android/AnyKernel3.git -b beta
         mv *.cpio AnyKernel3/recovery
         cd AnyKernel3
-        zip -r1 ../the_prince.zip . -x "**.git*" "*placeholder"
+        zip -r1 ../ofox-ci.zip . -x "**.git*" "*placeholder"
 
     - name: Release
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }}/tempo/the_prince.zip
+          OrangeFox/fox_${{ github.event.inputs.MANIFEST_BRANCH }}/tempo/ofox-ci.zip
         name: ${{ env.BUILD_DATE }}
         tag_name: ${{ github.run_id }}
         body: |
